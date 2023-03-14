@@ -9,7 +9,6 @@ import (
 )
 
 func main() {
-	fmt.Println(os.Args)
 
 	if len(os.Args) != 2 {
 		fmt.Fprintf(os.Stderr, "Usage: %s <config-file-path>\n",

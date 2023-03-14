@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -11,8 +10,9 @@ import (
 func main() {
 	router := mux.NewRouter().StrictSlash(false)
 	router.HandleFunc("/", handler).Methods("GET")
+	router.HandleFunc("/installCharts", installCharts).Methods("POST")
 
-	fmt.Println(http.ListenAndServe(":8080", router))
+	go consumer()
 	http.ListenAndServe(":8080", router)
 }
 
