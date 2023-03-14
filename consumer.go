@@ -9,15 +9,13 @@ import (
 	"time"
 
 	"github.com/confluentinc/confluent-kafka-go/kafka"
-	"github.com/santhosh-tekuri/jsonschema/loader"
 	"helm.sh/helm/v3/pkg/action"
-	"helm.sh/helm/v3/pkg/cli"
+	"helm.sh/helm/v3/pkg/chart"
+	"helm.sh/helm/v3/pkg/chart/loader"
 	"helm.sh/helm/v3/pkg/release"
-	"k8s.io/client-go/tools/clientcmd"
 )
 
 func consumer() {
-	fmt.Println("Reaching Here")
 	topic := "helm_charts"
 	c, err := kafka.NewConsumer(&kafka.ConfigMap{"bootstrap.servers": "localhost:9092", "group.id": "kafka-go-getting-started"})
 	if err != nil {
@@ -48,7 +46,7 @@ func consumer() {
 				fmt.Println(err)
 				continue
 			}
-			fmt.Printf("Consumed event from topic %s: key = %-10s value = %s\n and create release %s",
+			fmt.Printf("Consumed event from topic %s: key = %-10s value = %s\n and create release %v",
 				*ev.TopicPartition.Topic, string(ev.Key), string(ev.Value), rel)
 		}
 	}
@@ -57,20 +55,17 @@ func consumer() {
 
 }
 
-func initSettings() *cli.EnvSettings {
-	conf := cli.New()
-	conf.RepositoryCache = "/tmp"
-	return conf
-}
-
-var settings = initSettings()
-
 func InstallChart(message string) (*release.Release, error) {
+	fmt.Println("--------------")
+	fmt.Println(message)
 	var req HelmRequest
 	json.Unmarshal([]byte(message), req)
-	config, _ := clientcmd.BuildConfigFromFlags("", os.Getenv("KUBECONFIG"))
-	cmd := action.NewInstall(&conf)
-
+	actionConfig := new(action.Configuration)
+	helmDriver := os.Getenv("HELM_DRIVER")
+	if err := actionConfig.Init(settings.RESTClientGetter(), settings.Namespace(), helmDriver, nil); err != nil {
+		fmt.Println(err)
+	}
+	cmd := action.NewInstall(actionConfig)
 	releaseName, chartName, err := cmd.NameAndChart([]string{req.Name, req.ChartUrl})
 	if err != nil {
 		return nil, err
@@ -86,6 +81,14 @@ func InstallChart(message string) (*release.Release, error) {
 	if err != nil {
 		return nil, err
 	}
+	// Add chart URL as an annotation before installation
+	if ch.Metadata == nil {
+		ch.Metadata = new(chart.Metadata)
+	}
+	if ch.Metadata.Annotations == nil {
+		ch.Metadata.Annotations = make(map[string]string)
+	}
+	ch.Metadata.Annotations["chart_url"] = req.ChartUrl
 
 	cmd.Namespace = req.Namespace
 	release, err := cmd.Run(ch, req.Values)

@@ -23,7 +23,6 @@ type HelmCharts struct {
 func installCharts(w http.ResponseWriter, r *http.Request) {
 	var req HelmCharts
 	err := json.NewDecoder(r.Body).Decode(&req)
-	fmt.Println(err)
 	topic := "helm_charts"
 	p, err := kafka.NewProducer(&kafka.ConfigMap{"bootstrap.servers": "localhost:9092"})
 	if err != nil {
