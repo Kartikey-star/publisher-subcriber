@@ -2,17 +2,37 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
+	"io/ioutil"
 	"net/http"
+	"os"
 
 	"github.com/gorilla/mux"
+	"helm.sh/helm/v3/pkg/action"
+	kubefake "helm.sh/helm/v3/pkg/kube/fake"
 )
+
+func debug(format string, v ...interface{}) {
+	if settings.Debug {
+		format = fmt.Sprintf("[debug] %s\n", format)
+	}
+}
 
 func main() {
 	router := mux.NewRouter().StrictSlash(false)
 	router.HandleFunc("/", handler).Methods("GET")
 	router.HandleFunc("/installCharts", installCharts).Methods("POST")
+	router.HandleFunc("/uninstallCharts", uninstallCharts).Methods("DELETE")
 
-	go consumer()
+	actionConfig := new(action.Configuration)
+	helmDriver := os.Getenv("HELM_DRIVER")
+	if err := actionConfig.Init(settings.RESTClientGetter(), settings.Namespace(), helmDriver, debug); err != nil {
+		fmt.Println(err)
+	}
+	actionConfig.KubeClient = &kubefake.PrintingKubeClient{Out: ioutil.Discard}
+
+	go installChartsConsumer(actionConfig)
+	go uninstallChartsConsumer(actionConfig)
 	http.ListenAndServe(":8080", router)
 }
 

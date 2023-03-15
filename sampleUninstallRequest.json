@@ -1,0 +1,9 @@
+{
+    "releases":[
+        {"name":"elasticsearchsed"},
+        {"name":"elasticsearchsedtwo"},
+        {"name":"gitlab"},
+        {"name":"redissedone"},
+        {"name":"redissedtwo"}
+    ]
+}

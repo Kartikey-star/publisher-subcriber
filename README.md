@@ -14,10 +14,22 @@ docker compose up -d
 
 We need to publish the request to install the helm charts. The request consists of `chart_url`,`namespace` and `values` in JSON format.This helm request has to be sent to a topic. In order to create a topic you can make use of following command:
 
+
+We need to create two topics `helm_installations` and `helm_deletions`
+
 ```
 docker compose exec broker \
   kafka-topics --create \
-    --topic purchases \
+    --topic helm_installations \
+    --bootstrap-server localhost:9092 \
+    --replication-factor 1 \
+    --partitions 1
+```
+
+```
+docker compose exec broker \
+  kafka-topics --create \
+    --topic helm_deletions \
     --bootstrap-server localhost:9092 \
     --replication-factor 1 \
     --partitions 1
