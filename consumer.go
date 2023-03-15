@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"os/signal"
 	"syscall"
@@ -12,6 +13,7 @@ import (
 	"helm.sh/helm/v3/pkg/action"
 	"helm.sh/helm/v3/pkg/chart"
 	"helm.sh/helm/v3/pkg/chart/loader"
+	kubefake "helm.sh/helm/v3/pkg/kube/fake"
 	"helm.sh/helm/v3/pkg/release"
 )
 
@@ -56,15 +58,14 @@ func consumer() {
 }
 
 func InstallChart(message string) (*release.Release, error) {
-	fmt.Println("--------------")
-	fmt.Println(message)
 	var req HelmRequest
-	json.Unmarshal([]byte(message), req)
+	json.Unmarshal([]byte(message), &req)
 	actionConfig := new(action.Configuration)
 	helmDriver := os.Getenv("HELM_DRIVER")
 	if err := actionConfig.Init(settings.RESTClientGetter(), settings.Namespace(), helmDriver, nil); err != nil {
 		fmt.Println(err)
 	}
+	actionConfig.KubeClient = &kubefake.PrintingKubeClient{Out: ioutil.Discard}
 	cmd := action.NewInstall(actionConfig)
 	releaseName, chartName, err := cmd.NameAndChart([]string{req.Name, req.ChartUrl})
 	if err != nil {
