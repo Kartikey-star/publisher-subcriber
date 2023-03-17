@@ -1,66 +1,68 @@
 {
-    "charts": [
-      {
-        "name": "redissedone",
-        "namespace": "default",
-        "chart_url": "https://github.com/openshift-helm-charts/charts/releases/download/redhat-redis-sed-1.0.1/redhat-redis-sed-1.0.1.tgz",
-        "values": {
-          "redis": {
-            "sed": {
-              "hostname": "myredis-master",
-              "password": "ZoAglygDjB"
-            }
+  "charts": [
+    {
+      "name": "redissed",
+      "namespace": "default",
+      "chart_url": "https://github.com/openshift-helm-charts/charts/releases/download/redhat-redis-sed-1.0.1/redhat-redis-sed-1.0.1.tgz",
+      "values": {
+        "redis": {
+          "sed": {
+            "hostname": "myredis-master",
+            "password": "ZoAglygDjB"
           }
         }
-      },
-      {
-        "name": "redissedtwo",
-        "namespace": "default",
-        "chart_url": "https://github.com/openshift-helm-charts/charts/releases/download/redhat-redis-sed-1.0.1/redhat-redis-sed-1.0.1.tgz",
-        "values": {
-          "redis": {
-            "sed": {
-              "hostname": "myredis-master",
-              "password": "ZoAglygDjB"
-            }
+      }
+    },
+    {
+      "name": "psqlsed",
+      "namespace": "default",
+      "chart_url": "https://github.com/openshift-helm-charts/charts/releases/download/redhat-psql-sed-1.0.0/redhat-psql-sed-1.0.0.tgz",
+      "values": {
+        "postgresql": {
+          "sed": {
+            "databasename": "mydatabase",
+            "password": "password",
+            "hostname": "myhostname",
+            "port": 5432,
+            "username": "user"
           }
         }
-      },
-      {
-        "chart_url": "https://github.com/openshift-helm-charts/charts/releases/download/redhat-elasticsearch-sed-1.0.0/redhat-elasticsearch-sed-1.0.0.tgz",
-        "name": "elasticsearchsed",
-        "namespace": "default",
-        "values": {
-          "clusterHealthCheckParams": "wait_for_status=green&timeout=1s",
-          "elasticsearch": {
-            "sed": {
-              "cluster": "mycluster",
-              "hostname": "myhostname",
-              "password": "password",
-              "port": 9200,
-              "user": "user"
-            }
+      }
+    },
+    {
+      "chart_url": "https://github.com/openshift-helm-charts/charts/releases/download/redhat-elasticsearch-sed-1.0.0/redhat-elasticsearch-sed-1.0.0.tgz",
+      "name": "elasticsearchsed",
+      "namespace": "default",
+      "values": {
+        "clusterHealthCheckParams": "wait_for_status=green&timeout=1s",
+        "elasticsearch": {
+          "sed": {
+            "cluster": "mycluster",
+            "hostname": "myhostname",
+            "password": "password",
+            "port": 9200,
+            "user": "user"
           }
         }
-      },
-      {
-        "chart_url": "https://github.com/openshift-helm-charts/charts/releases/download/redhat-elasticsearch-sed-1.0.0/redhat-elasticsearch-sed-1.0.0.tgz",
-        "name": "elasticsearchsedtwo",
-        "namespace": "default",
-        "values": {
-          "clusterHealthCheckParams": "wait_for_status=green&timeout=1s",
-          "elasticsearch": {
-            "sed": {
-              "cluster": "mycluster",
-              "hostname": "myhostname",
-              "password": "password",
-              "port": 9200,
-              "user": "user"
-            }
+      }
+    },
+    {
+      "chart_url": "https://github.com/openshift-helm-charts/charts/releases/download/redhat-mongo-sed-1.0.0/redhat-mongo-sed-1.0.0.tgz",
+      "name": "mongosed",
+      "namespace": "default",
+      "values": {
+        "mongodb": {
+          "sed": {
+            "databasename": "admin",
+            "hostname": "myhostname",
+            "password": "password",
+            "port": 27017,
+            "username": "root"
           }
         }
-      },
-      {
+      }
+    },
+    {
         "chart_url": "https://gitlab-charts.s3.amazonaws.com/gitlab-6.9.3.tgz",
         "name": "gitlab",
         "namespace": "default",
@@ -1083,5 +1085,5 @@
           }
         }
       }
-    ]
-  }
+  ]
+}

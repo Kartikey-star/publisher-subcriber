@@ -44,7 +44,7 @@ docker compose exec broker \
 ```
 
 
-Once the topic get's created please run the code and you can send request to create helm releases on your cluster.
+Once the topic get's created please run the code and you can send request to create and delete helm releases on your kubernetes cluster.
 
 
 There exist's a sample request in the root level which can be used to test the code.

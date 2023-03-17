@@ -1,9 +1,9 @@
 {
     "releases":[
         {"name":"elasticsearchsed"},
-        {"name":"elasticsearchsedtwo"},
+        {"name":"psqlsed"},
         {"name":"gitlab"},
-        {"name":"redissedone"},
-        {"name":"redissedtwo"}
+        {"name":"mongosed"},
+        {"name":"redissed"}
     ]
 }

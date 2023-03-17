@@ -40,6 +40,7 @@ func installCharts(w http.ResponseWriter, r *http.Request) {
 		data := []byte(string(stringJson))
 		p.Produce(&kafka.Message{
 			TopicPartition: kafka.TopicPartition{Topic: &topic, Partition: kafka.PartitionAny},
+			Key:            []byte(val.Name),
 			Value:          data,
 		}, nil)
 	}
@@ -49,7 +50,7 @@ func installCharts(w http.ResponseWriter, r *http.Request) {
 	responseJSON(w, http.StatusCreated, fmt.Sprintf("request sent to topic %v", topic))
 }
 
-//sent request of charts to be installed
+//sent request of charts to be uninstalled
 func uninstallCharts(w http.ResponseWriter, r *http.Request) {
 	var req HelmUninstallations
 	err := json.NewDecoder(r.Body).Decode(&req)
@@ -81,6 +82,7 @@ func uninstallCharts(w http.ResponseWriter, r *http.Request) {
 		data := []byte(string(stringJson))
 		p.Produce(&kafka.Message{
 			TopicPartition: kafka.TopicPartition{Topic: &topic, Partition: kafka.PartitionAny},
+			Key:            []byte(val.Name),
 			Value:          data,
 		}, nil)
 	}
