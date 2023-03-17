@@ -1,6 +1,6 @@
 # publisher-subcriber
 
-The following project is an illustration of using publisher subscriber model to create multiple helm releases. The request to install helm charts are sent to a topic `helm_charts`. The consumer subscribes to this topic and creates helm release for the message sent to it.
+The following project is an illustration of using publisher subscriber model to create multiple helm releases. The request to install helm charts are sent to a topic `helm_installations` and request to uninstall helm charts are sent to topic `helm_deletions`. The consumer subscribes to these topics, and  creates and uninstalls helm releases for the message sent to it.
 
 We are going to need a Kafka Cluster for our client application to operate with. We do have a file called as `docker-compose.yml`[./docker-compose.yml]. This is used to setup kafka cluster locally as a docker deamon.
 
